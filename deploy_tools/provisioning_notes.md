@@ -10,7 +10,8 @@ Provisioning a new site
 
 eg, on Ubuntu:
 
-    sudo apt-get install nginx git python38 python3.8-venv
+    sudo apt-get install nginx git python3.8 python3.8-venv
+    sudo apt-get install python3-pip
 
 ## Nginx Virtual Host config
 
