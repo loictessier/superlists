@@ -5,14 +5,12 @@ Provisioning a new site
 
 * nginx
 * Python 3.8
-* pipenv (pip + virtualenv)
+* virtualenv + pip
 * Git
 
 eg, on Ubuntu:
 
-    sudo apt-get install nginx git python38
-    sudo apt-get install python3-pip
-    pip3 install pipenv
+    sudo apt-get install nginx git python38 python3.8-venv
 
 ## Nginx Virtual Host config
 
