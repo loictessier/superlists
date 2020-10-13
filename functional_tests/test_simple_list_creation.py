@@ -1,6 +1,8 @@
-from .base import FunctionalTest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+
+from .base import FunctionalTest
+from .list_page import ListPage
 
 
 class NewVisitortest(FunctionalTest):
@@ -16,7 +18,8 @@ class NewVisitortest(FunctionalTest):
         self.assertIn('To-Do', header_text)
 
         # She is invited to enter a to-do item straight away
-        inputbox = self.get_item_input_box()
+        list_page = ListPage(self)
+        inputbox = list_page.get_item_input_box()
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Enter a to-do item'
@@ -29,22 +32,22 @@ class NewVisitortest(FunctionalTest):
         # When she hits enter, the page updates, and now the page lists
         # "1: Buy peacock feathers" as an item in a to-do list
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: Buy peacock feathers')
+        list_page.wait_for_row_in_list_table('Buy peacock feathers', 1)
 
         # There is still a text box inviting her to add another item. She
         # enters "Use peacock feathers to make a fly" (Edith is very methodical)
-        self.add_list_item('Use peacock feathers to make a fly')
+        list_page.add_list_item('Use peacock feathers to make a fly')
 
         # The page update again, and now shows both items on her list
-        self.wait_for_row_in_list_table('2: Use peacock feathers to make a fly')
-        self.wait_for_row_in_list_table('1: Buy peacock feathers')
+        list_page.wait_for_row_in_list_table('Use peacock feathers to make a fly', 2)
+        list_page.wait_for_row_in_list_table('Buy peacock feathers', 1)
 
         # Satisfied, she goes back to sleep
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         # Edith starts a new to-do list
         self.browser.get(self.live_server_url)
-        self.add_list_item('Buy peacock feathers')
+        list_page = ListPage(self).add_list_item('Buy peacock feathers')
 
         # She notices that her list has a unique URL
         edith_list_url = self.browser.current_url
@@ -65,7 +68,7 @@ class NewVisitortest(FunctionalTest):
 
         # Francis starts a new list by entering a new item
         # He is less interesting than Edith...
-        self.add_list_item('Buy milk')
+        list_page.add_list_item('Buy milk')
 
         # Francis gets his own unique URL
         francis_list_url = self.browser.current_url
